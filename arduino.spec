@@ -2,7 +2,7 @@
 %define version		1.0
 %define	prerel		rc2
 %define longversion	0100
-%define mdvrel		1
+%define mdvrel		2
 
 Name:		arduino
 Version:	%version
