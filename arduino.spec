@@ -1,6 +1,6 @@
-%define gitrev		6a68361
+#define gitrev		6a68361
 %define version		1.0
-%define	prerel		rc2
+#define	prerel		rc2
 %define longversion	0100
 %define mdvrel		2
 
@@ -15,7 +15,11 @@ URL:		http://www.arduino.cc/
 # There are lots of binaries in the "source" tarball.  Remove them with:
 # curl https://nodeload.github.com/arduino/Arduino/tarball/%{version}-%{prerel} | tar -xzvf - && rm -rf arduino-Arduino-%{gitrev}/build/linux/dist/tools/* && find arduino-Arduino-%{gitrev} \( -type d \( -name macosx -o -name windows \) -o -type f \( -iname '*.jar' -or -iname '*.tgz' -or -iname '*.so' \) \) -print0 | xargs -0 rm -rf && tar -cjf arduino-Arduino-%{gitrev}.tar.bz2 arduino-Arduino-%{gitrev}
 # See also http://code.google.com/p/arduino/issues/detail?id=193
+%if 0%{?gitrev}
 Source0:	arduino-Arduino-%{gitrev}.tar.bz2
+%else
+Source0:	%{name}-%{version}.tar.bz2
+%endif
 BuildArch:	noarch
 
 # Use unbundled libs:
@@ -48,13 +52,13 @@ This package contains an IDE that can be used to develop and upload code
 to the micro-controller.
 
 
-%package -n %{name}-core
+%package core
 Summary:	Files required for compiling code for Arduino-compatible micro-controllers
 Group:		Development/Other
 Requires:	cross-avr-gcc cross-avr-gcc-c++ avr-libc avrdude
 
 
-%description -n %{name}-core
+%description core
 Arduino is an open-source electronics prototyping platform based on
 flexible, easy-to-use hardware and software. It's intended for artists,
 designers, hobbyists, and anyone interested in creating interactive
@@ -64,13 +68,12 @@ This package contains the core files required to compile and upload
 Arduino code.
 
 
-%package -n %{name}-doc
+%package doc
 Summary:	Documentation for the Arduino micro-controller platform
 Group:		Development/Other
-Requires:	%{name}
 
 
-%description -n %{name}-doc
+%description doc
 Arduino is an open-source electronics prototyping platform based on
 flexible, easy-to-use hardware and software. It's intended for artists,
 designers, hobbyists, and anyone interested in creating interactive
@@ -80,7 +83,11 @@ This package contains reference documentation.
 
 
 %prep
-%setup -q -n %{name}-Arduino-%{gitrev}
+%if 0%{?gitrev}
+%setup -q -n arduino-Arduino-%{gitrev}
+%else
+%setup -q
+%endif
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
 %patch6 -p1
@@ -107,7 +114,7 @@ cd ..
 ant
 cd ../build
 ant dist < /dev/null
-tar -xf linux/%{name}-%{longversion}.tgz
+tar -xf linux/%{name}-%{longversion}-linux.tgz
 
 
 %install
@@ -161,7 +168,7 @@ rm -rf %{buildroot}
 
 
 %files
-%defattr(-,root,root,-)
+%doc license.txt readme.txt todo.txt
 %{_bindir}/*
 %{_datadir}/%{name}/*.jar
 %{_datadir}/%{name}/lib/
@@ -174,7 +181,6 @@ rm -rf %{buildroot}
 
 
 %files -n %{name}-core
-%defattr(-,root,root,-)
 %doc license.txt readme.txt todo.txt
 %config(noreplace) %{_sysconfdir}/%{name}/boards.txt
 %config(noreplace) %{_sysconfdir}/%{name}/programmers.txt
@@ -184,7 +190,4 @@ rm -rf %{buildroot}
 
 
 %files -n %{name}-doc
-%defattr(-,root,root,-)
 %{_defaultdocdir}/%{name}-%{version}/
-
-
