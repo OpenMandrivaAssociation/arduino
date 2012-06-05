@@ -30,6 +30,7 @@ Patch2:		arduino-1.0-rc2-mdv-use-system-avrdude.patch
 # Requested upstream in http://github.com/arduino/Arduino/pull/5:
 Patch3:		arduino-0022-fedora-use-system-rxtx.patch
 
+Patch4:		arduino-0022-fedora-icons-etc.patch
 Patch6:		arduino-0022-mdv-add-to-groups.patch
 Patch7:		arduino-0022-mdv-release-check.patch
 Patch8:		arduino-1.0.1-mdv-dont-build-avrdude.patch
@@ -93,8 +94,17 @@ chmod a+rx build/linux/%{name}-add-groups
 %patch0
 %patch2 -p1
 %patch3 -p1
+
+pwd=`pwd`
+cd /
+git apply --directory=$pwd %{PATCH4}
+cd $pwd
+
 %patch7 -p1
 %patch8 -p1
+
+echo "\nupdate.check=false" >> build/shared/lib/preferences.txt
+
 build-jar-repository -p -s app/lib/ ecj jna RXTXcomm
 
 
