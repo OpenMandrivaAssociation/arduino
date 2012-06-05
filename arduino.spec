@@ -174,7 +174,7 @@ cp -a ../linux/cc.arduino.add-groups.policy %{buildroot}/%{_datadir}/polkit-1/ac
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/polkit-1/actions/cc.arduino.add-groups.policy
 /usr/lib/%{name}-add-groups
-%{_mandir}/man1/%{name}.1.xz
+%{_mandir}/man1/%{name}.1*
 %{_datadir}/%{name}/reference
 
 
