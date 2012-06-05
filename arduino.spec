@@ -93,13 +93,6 @@ chmod a+rx build/linux/%{name}-add-groups
 %patch0
 %patch2 -p1
 %patch3 -p1
-
-# "git apply" fails silently if pwd is git-controlled.
-pwd=`pwd`
-cd /
-git apply --directory=$pwd %{PATCH4}
-cd $pwd
-
 %patch7 -p1
 %patch8 -p1
 build-jar-repository -p -s app/lib/ ecj jna RXTXcomm
