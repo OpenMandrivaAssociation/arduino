@@ -1,7 +1,7 @@
 #define gitrev		6a68361
-%define version		1.0
+%define version		1.0.1
 #define	prerel		rc2
-%define longversion	0100
+%define longversion	0101
 %define mdvrel		1
 
 Name:		arduino
@@ -9,7 +9,7 @@ Version:	%version
 Release:	%mkrel %{mdvrel}%{?prerel:.%prerel}
 Summary:	An IDE for Arduino-compatible electronics prototyping platforms
 Group:		Development/Other
-License:	GPLv2+ and LGPLv2+ and CC-BY-SA
+License:	GPLv2+ and LGPLv2+ and CC BY-SA
 URL:		http://www.arduino.cc/
 
 # There are lots of binaries in the "source" tarball.  Remove them with:
@@ -18,7 +18,7 @@ URL:		http://www.arduino.cc/
 %if 0%{?gitrev}
 Source0:	arduino-Arduino-%{gitrev}.tar.bz2
 %else
-Source0:	%{name}-%{version}.tar.bz2
+Source0:	%{name}-%{version}.tar.xz
 %endif
 BuildArch:	noarch
 
@@ -26,15 +26,13 @@ BuildArch:	noarch
 Patch0:		arduino-0022-mdv-script.patch
 
 Patch2:		arduino-1.0-rc2-mdv-use-system-avrdude.patch
+
 # Requested upstream in http://github.com/arduino/Arduino/pull/5:
 Patch3:		arduino-0022-fedora-use-system-rxtx.patch
 
-# Requested upstream in http://github.com/arduino/Arduino/pull/6:
-Patch4:		arduino-0022-fedora-icons-etc.patch
-
 Patch6:		arduino-0022-mdv-add-to-groups.patch
 Patch7:		arduino-0022-mdv-release-check.patch
-Patch8:		arduino-1.0-rc2-mdv-dont-build-avrdude.patch
+Patch8:		arduino-1.0.1-mdv-dont-build-avrdude.patch
 
 BuildRequires:	java-devel >= 0:1.6.0 jpackage-utils ant ant-apache-regexp desktop-file-utils ecj jna rxtx git
 Requires:	%{name}-core = %{version}-%{release}, %{name}-doc = %{version}-%{release}
@@ -162,9 +160,6 @@ cp -a ../linux/%{name}-add-groups %{buildroot}/usr/lib
 
 mkdir -p %{buildroot}/%{_datadir}/polkit-1/actions
 cp -a ../linux/cc.arduino.add-groups.policy %{buildroot}/%{_datadir}/polkit-1/actions
-
-%clean
-rm -rf %{buildroot}
 
 
 %files
