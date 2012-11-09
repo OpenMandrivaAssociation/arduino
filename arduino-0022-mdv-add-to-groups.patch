@@ -1,0 +1,80 @@
+diff --git a/build/linux/arduino-add-groups b/build/linux/arduino-add-groups
+new file mode 100755
+index 0000000..1f27e51
+--- /dev/null
++++ b/build/linux/arduino-add-groups
+@@ -0,0 +1,23 @@
++#!/bin/bash
++
++uid=${PKEXEC_UID:-${SUDO_UID}}
++
++if [[ -z $uid ]]; then
++    echo "Could not determine which user to add to the groups."
++    exit 2
++fi
++
++login=$(perl -e 'print((getpwuid shift)[0])' $uid)
++
++for group in dialout uucp; do
++    if ! groups $login | grep -q " : .*\b$group\b"; then
++	missing_groups=${missing_groups:+$missing_groups,}$group
++    fi
++done
++
++if [[ -n $missing_groups ]]; then
++    exec usermod -a -G $missing_groups $login
++else
++    echo "No required groups are missing for this user."
++    exit 1
++fi
+diff --git a/build/linux/cc.arduino.add-groups.policy b/build/linux/cc.arduino.add-groups.policy
+new file mode 100644
+index 0000000..197d5ee
+--- /dev/null
++++ b/build/linux/cc.arduino.add-groups.policy
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE policyconfig PUBLIC
++"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
++"http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
++<policyconfig>
++  
++  <vendor>Arduino</vendor>
++  <vendor_url>http://arduino.cc/</vendor_url>
++  
++  <action id="cc.arduino.add-groups.policy">
++    <description>Add the user to groups required to access USB and serial ports.</description>
++    <message>Authentication is required to add the current user to the required groups.</message>
++    <icon_name>arduino</icon_name>
++    <defaults>
++      <allow_any>no</allow_any>
++      <allow_inactive>no</allow_inactive>
++      <allow_active>auth_admin</allow_active>
++    </defaults>
++    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/arduino-add-groups</annotate>
++  </action>
++  
++</policyconfig>
+diff --git a/build/linux/dist/arduino b/build/linux/dist/arduino
+index 7128bac..c45b678 100755
+--- a/build/linux/dist/arduino
++++ b/build/linux/dist/arduino
+@@ -1,5 +1,18 @@
+ #!/bin/sh
+  
++if [[ `id -u` -ne 0 ]]; then
++    for group in dialout uucp; do
++	if ! groups $USER | grep -q " : .*\b$group\b"; then
++	    missing_groups="$missing_groups\n$group"
++	fi
++    done
++
++    if [[ -n $missing_groups ]] && zenity --title=Arduino --window-icon=/usr/share/icons/hicolor/16x16/apps/arduino.png --question --text "You need to be a member of the following groups to upload code to an Arduino microcontroller over the USB or serial ports:\n$missing_groups" --ok-label='Add' --cancel-label='Ignore'; then
++	pkexec /usr/lib/arduino-add-groups \
++	    && zenity --title=Arduino --window-icon=/usr/share/icons/hicolor/16x16/apps/arduino.png --info --text "You must log out and log in again before any changes will take effect."
++    fi
++fi
++
+ APPDIR="$(dirname -- $(readlink -f -- "${0}") )"
+ 
+ cd $APPDIR

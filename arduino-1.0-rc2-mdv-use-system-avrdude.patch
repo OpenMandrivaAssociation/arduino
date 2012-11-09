@@ -1,0 +1,15 @@
+Index: arduino-Arduino-6a68361/app/src/processing/app/debug/AvrdudeUploader.java
+===================================================================
+--- arduino-Arduino-6a68361.orig/app/src/processing/app/debug/AvrdudeUploader.java
++++ arduino-Arduino-6a68361/app/src/processing/app/debug/AvrdudeUploader.java
+@@ -193,8 +193,8 @@ public class AvrdudeUploader extends Upl
+       }
+     }
+     else {
+-      commandDownloader.add(Base.getHardwarePath() + "/tools/avr/bin/" + "avrdude");
+-      commandDownloader.add("-C" + Base.getHardwarePath() + "/tools/avr/etc/avrdude.conf");
++      commandDownloader.add("/usr/bin/avrdude");
++      commandDownloader.add("-C/etc/avrdude/avrdude.conf");
+     }
+ 
+     if (verbose || Preferences.getBoolean("upload.verbose")) {

@@ -1,0 +1,23 @@
+Index: arduino-1.0.1/build/build.xml
+===================================================================
+--- arduino-1.0.1.orig/build/build.xml
++++ arduino-1.0.1/build/build.xml
+@@ -348,7 +348,6 @@
+       <fileset dir="linux/dist" includes="tools/**" />
+     </copy>
+ 
+-    <chmod perm="755" file="linux/work/hardware/tools/avrdude" />
+   </target>
+ 
+   <target name="linux32-build" depends="linux-build" description="Build linux (32-bit) version">
+@@ -360,10 +359,6 @@
+   </target>
+ 
+   <target name="linux64-build" depends="linux-build" description="Build linux (64-bit) version">
+-    <copy tofile="linux/work/hardware/tools/avrdude" file="linux/dist/tools/avrdude64" overwrite="true" />
+-    <copy tofile="linux/work/lib/librxtxSerial.so" file="linux/dist/lib/librxtxSerial64.so" overwrite="true" />
+-
+-    <chmod perm="755" file="linux/work/hardware/tools/avrdude" />
+ 
+     <!-- Unzip AVR tools -->
+     <exec executable="tar" dir="linux/work/hardware">

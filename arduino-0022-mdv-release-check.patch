@@ -1,0 +1,12 @@
+Index: arduino-0022/build/build.xml
+===================================================================
+--- arduino-0022.orig/build/build.xml
++++ arduino-0022/build/build.xml
+@@ -122,7 +122,6 @@
+ 	<tokenfilter>
+ 	  <linetokenizer />
+ 	  <containsregex pattern="String VERSION_NAME = "/>
+-	  <replaceregex pattern="[^0-9]*" flags="g" replace=""/>
+ 	</tokenfilter>
+       </filterchain>
+     </loadfile>

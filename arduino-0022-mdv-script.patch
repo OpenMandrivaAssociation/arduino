@@ -1,0 +1,50 @@
+--- arduino	2010-12-31 15:50:52.000000000 +0000
++++ build/linux/dist/arduino	2010-12-31 15:01:19.000000000 +0000
+@@ -1,35 +1,28 @@
+-#!/bin/sh
+- 
++#!/bin/bash
++
+ if [[ `id -u` -ne 0 ]]; then
+     for group in dialout uucp; do
+ 	if ! groups $USER | grep -q " : .*\b$group\b"; then
+ 	    missing_groups="$missing_groups\n$group"
+ 	fi
+     done
+-
++    
+     if [[ -n $missing_groups ]] && zenity --title=Arduino --window-icon=/usr/share/icons/hicolor/16x16/apps/arduino.png --question --text "You need to be a member of the following groups to upload code to an Arduino microcontroller over the USB or serial ports:\n$missing_groups" --ok-label='Add' --cancel-label='Ignore'; then
+ 	pkexec /usr/lib/arduino-add-groups \
+ 	    && zenity --title=Arduino --window-icon=/usr/share/icons/hicolor/16x16/apps/arduino.png --info --text "You must log out and log in again before any changes will take effect."
+     fi
+ fi
+ 
+-APPDIR="$(dirname -- $(readlink -f -- "${0}") )"
++. /usr/share/java-utils/java-functions
+ 
+-cd $APPDIR
+- 
+-for LIB in \
+-    java/lib/rt.jar \
+-    java/lib/tools.jar \
+-    lib/*.jar \
+-    ;
+-do
+-    CLASSPATH="${CLASSPATH}:${LIB}"
+-done
+-export CLASSPATH
++MAIN_CLASS=processing.app.Base
+ 
+-LD_LIBRARY_PATH=`pwd`/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+-export LD_LIBRARY_PATH
++set_classpath ecj jna RXTXcomm
++for lib in /usr/share/arduino/*.jar; do
++    CLASSPATH="$CLASSPATH:$lib"
++done
+ 
+-export PATH="${APPDIR}/java/bin:${PATH}"
++set_flags -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+ 
+-java -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel processing.app.Base
++cd /usr/share/arduino
++run "$@"
