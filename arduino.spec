@@ -2,7 +2,7 @@
 %define version		1.0.1
 #define	prerel		rc2
 %define longversion	0101
-%define mdvrel		1
+%define mdvrel		2
 
 Name:		arduino
 Version:	%version
@@ -35,7 +35,10 @@ Patch6:		arduino-0022-mdv-add-to-groups.patch
 Patch7:		arduino-0022-mdv-release-check.patch
 Patch8:		arduino-1.0.1-mdv-dont-build-avrdude.patch
 
-BuildRequires:	java-devel >= 0:1.6.0 jpackage-utils ant ant-apache-regexp desktop-file-utils ecj jna rxtx git
+Patch9:		arduino-1.0.1-rosa-javac17.patch
+
+BuildRequires:	java-devel
+BuildRequires:	jpackage-utils ant ant-apache-regexp desktop-file-utils ecj jna rxtx git
 Requires:	%{name}-core = %{version}-%{release}, %{name}-doc = %{version}-%{release}
 Requires:	java >= 0:1.6.0 x11-font-type1 ecj jna rxtx
 Requires:	zenity perl polkit
@@ -102,6 +105,7 @@ cd $pwd
 
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 echo "\nupdate.check=false" >> build/shared/lib/preferences.txt
 
@@ -174,7 +178,7 @@ cp -a ../linux/cc.arduino.add-groups.policy %{buildroot}/%{_datadir}/polkit-1/ac
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/polkit-1/actions/cc.arduino.add-groups.policy
 /usr/lib/%{name}-add-groups
-%{_mandir}/man1/%{name}.1*
+%{_mandir}/man1/%{name}.1.xz
 %{_datadir}/%{name}/reference
 
 
@@ -189,3 +193,35 @@ cp -a ../linux/cc.arduino.add-groups.policy %{buildroot}/%{_datadir}/polkit-1/ac
 
 %files -n %{name}-doc
 %{_defaultdocdir}/%{name}-%{version}/
+
+
+%changelog
+* Tue Jun 05 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.0.1-1mdv2011.0
++ Revision: 802777
+- update to 1.0.1
+
+* Mon Dec 12 2011 Dmitry Mikhirev <dmikhirev@mandriva.org> 1.0-1
++ Revision: 740471
+- Rebuild
+- 1.0 final release
+- release bump
+
+  + Andrey Smirnov <asmirnov@mandriva.org>
+    - 1.0-rc2
+      Spec file totally rewritten
+
+  + Александр Казанцев <kazancas@mandriva.org>
+    - import arduino
+
+
+* Thu Oct 07 2010 Dmitry A. Morgun <dm6d64@gmail.com> 0021-1edm2010.1
++Package for the next version of Arduino IDE
+
+* Thu Aug 26 2010 Dmitry A. Morgun <dm6d64@gmail.com> 0018-2edm2010.1
++cross-avr-gcc version downgrade to 4.3.2 for correct work with Arduino Mega
+
+* Mon Nov 23 2009 Alejandro Vargas 
++Package for Mandriva
+
+* Mon Jun 2 2009 Alejandro Vargas 
++version 0018 

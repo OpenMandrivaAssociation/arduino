@@ -1,0 +1,52 @@
+Index: arduino-1.0.1/app/build.xml
+===================================================================
+--- arduino-1.0.1.orig/app/build.xml
++++ arduino-1.0.1/app/build.xml
+@@ -37,7 +37,7 @@
+     <echo message="override ${env.JAVA_HOME}/lib/tools.jar" />
+     <fail />
+ -->
+-    <javac target="1.5" 
++    <javac target="1.7" 
+ 	   srcdir="src" 
+ 	   destdir="bin" 
+ 	   excludes="**/tools/format/**" 
+Index: arduino-1.0.1/core/build.xml
+===================================================================
+--- arduino-1.0.1.orig/core/build.xml
++++ arduino-1.0.1/core/build.xml
+@@ -13,7 +13,7 @@
+     <methods dir="${basedir}/src/processing/core" />
+ 
+     <mkdir dir="bin" />
+-    <javac target="1.5" 
++    <javac target="1.7" 
+ 	   encoding="UTF-8"
+ 	   includeAntRuntime="false"
+ 	   srcdir="src" destdir="bin"/>
+Index: arduino-1.0.1/core/methods/build.xml
+===================================================================
+--- arduino-1.0.1.orig/core/methods/build.xml
++++ arduino-1.0.1/core/methods/build.xml
+@@ -4,7 +4,7 @@
+     <mkdir dir="bin" />
+     <!--		<javac target="1.5" srcdir="src" destdir="bin" classpath="../ant/ant.jar" debug="true"/>-->
+ <!--    <javac target="1.5" srcdir="src" destdir="bin" classpath="/usr/share/ant/ant.jar" debug="true"/>-->
+-    <javac target="1.5" 
++    <javac target="1.7" 
+ 	   srcdir="src" destdir="bin" 
+ 	   debug="true" 
+ 	   includeantruntime="true" />
+Index: arduino-1.0.1/core/preproc/build.xml
+===================================================================
+--- arduino-1.0.1.orig/core/preproc/build.xml
++++ arduino-1.0.1/core/preproc/build.xml
+@@ -3,7 +3,7 @@
+ 	<target name="compile">
+ 		<mkdir dir="bin" />
+ <!--		<javac target="1.5" srcdir="src" destdir="bin" classpath="../ant/ant.jar" debug="true"/>-->
+-		<javac target="1.5" srcdir="src" destdir="bin" classpath="/usr/share/ant/ant.jar" debug="true"/>
++		<javac target="1.7" srcdir="src" destdir="bin" classpath="/usr/share/ant/ant.jar" debug="true"/>
+ 	</target>
+ 		
+ 	<target name="task-lib" depends="compile">
