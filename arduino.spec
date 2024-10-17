@@ -10,7 +10,7 @@ Release:	%mkrel %{mdvrel}%{?prerel:.%prerel}
 Summary:	An IDE for Arduino-compatible electronics prototyping platforms
 Group:		Development/Other
 License:	GPLv2+ and LGPLv2+ and CC BY-SA
-URL:		http://www.arduino.cc/
+URL:		https://www.arduino.cc/
 
 # There are lots of binaries in the "source" tarball.  Remove them with:
 # curl https://nodeload.github.com/arduino/Arduino/tarball/%{version}-%{prerel} | tar -xzvf - && rm -rf arduino-Arduino-%{gitrev}/build/linux/dist/tools/* && find arduino-Arduino-%{gitrev} \( -type d \( -name macosx -o -name windows \) -o -type f \( -iname '*.jar' -or -iname '*.tgz' -or -iname '*.so' \) \) -print0 | xargs -0 rm -rf && tar -cjf arduino-Arduino-%{gitrev}.tar.bz2 arduino-Arduino-%{gitrev}
